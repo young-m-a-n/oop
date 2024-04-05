@@ -1,0 +1,30 @@
+#include<iostream>
+#include <fstream>
+#include <cmath> // for pow()
+using namespace std;
+int main(){
+	float p, * biex, * bitheory;
+	int k=20, N = 100000, count;  // N number of experiment
+	p = 1.0 / 6.0;
+	biex = new float[k + 1];
+	bitheory = new float[k + 1];
+	for (int i = 0; i <= k; i++) biex[i] = 0;
+	for (int i = 0; i < N; ++i) {
+		int count = 1;
+		for (int j = 1; j <= k; j++) {
+			if (rand() % 6 + 1 == 6) {
+				count = j;
+				break;
+			}
+		}
+		if (count <= k) biex[count]++;
+	}
+	for (int i = 0; i <= k; i++) biex[i] /= (float)N; 
+	ofstream xxx("gemoetrical_distribution.txt");
+	for (int i = 0;i <= k; i++) {
+		bitheory[i] = pow((1 - p), i - 1) * p;
+		xxx << i << " " << bitheory[i] << " " << biex[i] << endl;
+	}
+	xxx.close();
+	return 1;
+}
