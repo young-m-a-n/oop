@@ -1,0 +1,88 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+#define PIE 3.141592
+#define fs1 44100
+
+void makingNote(int note_length, int note_frequency, int note_amp, short* note_data);
+void makingNote(int note_length, int note_frequency, int note_amp, int note_length2, int note_frequency2, int note_amp2, short* note_data);
+
+int main() {
+   ifstream xx("my.wav", ios::binary | ios::in);
+   if (!xx) return 999;  // if the file is not found
+
+   // 공용으로 쓸 header
+   char header[44];
+   xx.read(header, 44);
+
+   xx.close();
+   short* n;   n = (short*)(header + 22);
+   
+   *n = 2;
+   
+   // note_data 선언
+   short* note_data = new short[fs1];
+
+   // 산토끼 노래 만드는 코드
+   /*
+   ofstream toki("toki.wav", ios::binary | ios::out);
+   if (!toki) return 666;  //  if the file is not found
+
+   ifstream ff("score.txt", ios::binary | ios::in);
+   if (!ff) return 999;  // if the file is not found
+
+   // note 와 관련된 3가지 variable
+   int note_length, note_frequency, note_amp;
+
+   toki.write(header, 44 * sizeof(char));
+
+   while (ff >> note_length >> note_frequency >> note_amp) {
+      makingNote(note_length, note_frequency, note_amp, note_data);
+      toki.write((char*)note_data, fs1 * sizeof(short));
+   }
+   toki.close();
+   ff.close();
+   */
+
+   // 화음 만드는 코드
+   ofstream choral("choral.wav", ios::binary | ios::out);
+   if (!choral) return 666;  //  if the file is not found
+
+   ifstream sc2("score2.txt", ios::binary | ios::in);
+   if (!sc2) return 999;  // if the file is not found
+
+   // note 와 관련된 3가지 variable
+   int note_length, note_frequency, note_amp;
+   int note_length2, note_frequency2, note_amp2;
+
+   choral.write(header, 44 * sizeof(char));
+
+   while (sc2 >> note_length >> note_frequency >> note_amp >> note_length2 >> note_frequency2 >> note_amp2) {
+      makingNote(note_length, note_frequency, note_amp, note_length2, note_frequency2, note_amp2, note_data);
+      choral.write((char*)note_data, fs1 * sizeof(short));
+   }
+   choral.close();
+   sc2.close();
+
+   return 1;
+}
+
+void makingNote(int note_length, int note_frequency, int note_amp, short* note_data)
+{
+   // a 진폭, f 주파수, N 샘플수(1초는 fs[0] samples, 44100 또는 8000)
+   float t = 0;
+   float dt = 1. / fs1;
+   for (int j = 0; j < fs1; j++, t += dt) {
+      note_data[j] = (short)(note_amp * sin(2.0 * PIE * note_frequency * t));   
+   }
+}
+
+void makingNote(int note_length, int note_frequency, int note_amp, int note_length2, int note_frequency2, int note_amp2, short* note_data)
+{
+   // a 진폭, f 주파수, N 샘플수(1초는 fs[0] samples, 44100 또는 8000)
+   float t = 0;
+   float dt = 1. / fs1;
+   for (int j = 0; j < fs1; j++, t += dt) {
+      note_data[j] = (short)(note_amp * sin(2.0 * PIE * note_frequency * t) + note_amp2* sin(2.0 * PIE * note_frequency2 * t));
+   }
+}
