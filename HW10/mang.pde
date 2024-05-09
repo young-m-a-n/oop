@@ -1,0 +1,54 @@
+class mang {
+  mang(){
+    x=150;
+    y=450;
+    d=3;
+ }    
+ float x,y,d;
+ void show(){
+       fill(255,218,185);
+  arc(x+d*14,y,d*6,d*10,3*PI/2,5*PI/2);
+  fill(0,0,0);
+  arc(x,y,d*30,d*40,PI,2*PI);
+  fill(255,218,185);
+  beginShape();
+  vertex(x-d*15,y);
+  vertex(x-d*8,y-d*13);
+  vertex(x-d*5,y-d*10);
+  vertex(x-d*3,y-d*13);
+  vertex(x,y-d*10);
+  vertex(x+d*3,y-d*13);
+  vertex(x+d*5,y-d*10);
+  vertex(x+d*8,y-d*13);
+  vertex(x+d*15,y);
+  endShape();
+  fill(255,218,185);
+  arc(x,y,d*30,d*40,0,PI);
+  strokeWeight(d/2);
+  arc(x-d*6,y-d*7,d*6,d*3,PI,2*PI);
+  arc(x+d*6,y-d*7,d*6,d*3,PI,2*PI);
+  strokeWeight(0);
+  fill(255,255,255);
+  ellipse(x,y+d*4,d*2,d*12);
+  fill(255,0,0);
+  ellipse(x,y+d*15,d*4,d*2);
+  fill(0,0,0);
+  circle(x-d*5,y-d*5,d);
+  circle(x+d*5,y-d*5,d);
+ }
+ int collide(among a){
+   float dx=x-a.x-4*a.d;
+   float dy=y-a.y-15*a.d;
+   float dd=sqrt(dx*dx+dy*dy);
+   if (dd<120) return 300;
+   else return 0;
+ }
+  void keyMove() {
+    if (key == 'd') x += 7;
+    else if (key == 'w') y -= 7;
+    else if (key == 's') y += 7;
+    else if (key == 'a') x -= 7;
+  }
+} // end of class
+     
+ 
